@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Edit Intelligence Feed</h1>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <input type="text"
+           name="source"
+           class="form-control mb-3"
+           value="{{ feed.source }}">
+
+    <input type="text"
+           name="threat_type"
+           class="form-control mb-3"
+           value="{{ feed.threat_type }}">
+
+    <input type="text"
+           name="severity"
+           class="form-control mb-3"
+           value="{{ feed.severity }}">
+
+    <textarea name="description"
+              class="form-control mb-3">{{ feed.description }}</textarea>
+
+    <button class="btn btn-success">
+        Update
+    </button>
+
+</form>
+
+{% endblock %}

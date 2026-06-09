@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Add New Threat</h1>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <div class="mb-3">
+
+        <label>Threat Name</label>
+
+        <input
+            type="text"
+            name="threat_name"
+            class="form-control"
+            required
+        >
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Category</label>
+
+        <input
+            type="text"
+            name="category"
+            class="form-control"
+            required
+        >
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Risk Score</label>
+
+        <input
+            type="number"
+            name="risk_score"
+            class="form-control"
+            min="0"
+            max="100"
+            required
+        >
+
+    </div>
+
+    <button
+        type="submit"
+        class="btn btn-success"
+    >
+        Save Threat
+    </button>
+
+    <a
+        href="/threats/"
+        class="btn btn-secondary"
+    >
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}

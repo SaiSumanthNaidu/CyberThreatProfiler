@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="mb-4">
+
+    <h1 class="display-5">
+        Cyber Threat Dashboard
+    </h1>
+
+    <p>
+        Welcome back,
+        <strong>{{ user.username }}</strong>
+    </p>
+
+</div>
+
+<div class="row g-4">
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card-box">
+            <div class="card-title">Posts</div>
+            <div class="card-number">
+                {{ posts_count }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card-box">
+            <div class="card-title">Threats</div>
+            <div class="card-number">
+                {{ threats_count }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card-box">
+            <div class="card-title">Alerts</div>
+            <div class="card-number">
+                {{ alerts_count }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card-box">
+            <div class="card-title">High Risk</div>
+            <div class="card-number">
+                {{ high_risk_count }}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row mt-5">
+
+    <div class="col-lg-8">
+
+        <div class="card-box">
+
+            <h4>Threat Activity Trend</h4>
+
+            <canvas id="threatChart"></canvas>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card-box">
+
+            <h4>Risk Distribution</h4>
+
+            <canvas id="riskChart"></canvas>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row mt-4">
+
+    <div class="col-lg-4">
+
+        <div class="card-box">
+
+            <h5>Critical Threats</h5>
+
+            <h2>{{ critical_count }}</h2>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card-box">
+
+            <h5>Medium Threats</h5>
+
+            <h2>{{ medium_count }}</h2>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="card-box">
+
+            <h5>Low Threats</h5>
+
+            <h2>{{ low_count }}</h2>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row mt-4">
+
+    <div class="col-12">
+
+        <div class="card-box">
+
+            <h4>Recent Alerts</h4>
+
+            <table class="table table-dark mt-3">
+
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Risk</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+{% for alert in recent_alerts %}
+
+<tr>
+
+    <td>{{ alert.title }}</td>
+
+    <td>{{ alert.risk_level }}</td>
+
+    <td>{{ alert.created_at|date:"Y-m-d" }}</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+    <td colspan="3">
+
+        No alerts found.
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row mt-4">
+
+    <div class="col-12">
+
+        <div class="card-box">
+
+            <h4>Recent Threats</h4>
+
+            <table class="table table-dark mt-3">
+
+                <thead>
+
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Risk Score</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for threat in recent_threats %}
+
+                    <tr>
+
+                        <td>{{ threat.threat_name }}</td>
+
+                        <td>{{ threat.category }}</td>
+
+                        <td>{{ threat.risk_score }}</td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="3">
+                            No threats found.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="row mt-4">
+
+    <div class="col-12">
+
+        <div class="card-box">
+
+            <h4>Threat Categories Analytics</h4>
+
+            <table class="table table-dark mt-3">
+
+                <thead>
+
+                    <tr>
+                        <th>Category</th>
+                        <th>Total Threats</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for item in category_stats %}
+
+                    <tr>
+
+                        <td>{{ item.category }}</td>
+
+                        <td>{{ item.total }}</td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="2">
+                            No category data found.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row mt-4">
+
+    <div class="col-12">
+
+        <div class="card-box">
+
+            <h4>Threat Detection Timeline</h4>
+
+            <div class="mt-3">
+
+                {% for threat in recent_threats %}
+
+                <div class="mb-3">
+
+                    <strong>
+                        {{ threat.created_at|date:"H:i" }}
+                    </strong>
+
+                    -
+
+                    {{ threat.category }}
+
+                    detected
+
+                </div>
+
+                {% empty %}
+
+                <p>
+                    No threat activity found.
+                </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

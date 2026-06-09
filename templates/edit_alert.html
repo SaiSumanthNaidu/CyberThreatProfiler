@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Edit Alert</h1>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label>Title</label>
+        <input
+            type="text"
+            name="title"
+            class="form-control"
+            value="{{ alert.title }}"
+            required>
+    </div>
+
+    <div class="mb-3">
+
+        <label>Risk Level</label>
+
+        <select
+            name="risk_level"
+            class="form-control">
+
+            <option {% if alert.risk_level == 'Low' %}selected{% endif %}>Low</option>
+
+            <option {% if alert.risk_level == 'Medium' %}selected{% endif %}>Medium</option>
+
+            <option {% if alert.risk_level == 'High' %}selected{% endif %}>High</option>
+
+        </select>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Description</label>
+
+        <textarea
+            name="description"
+            class="form-control"
+            rows="4">{{ alert.description }}</textarea>
+
+    </div>
+
+    <button
+        type="submit"
+        class="btn btn-warning">
+        Update Alert
+    </button>
+
+    <a href="/alerts/" class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}
