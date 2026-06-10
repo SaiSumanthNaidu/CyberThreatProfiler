@@ -28,7 +28,7 @@ def dashboard(request):
     ).count()
 
     critical_count = Threat.objects.filter(
-    risk_score__gte=80
+        risk_score__gte=80
     ).count()
 
     medium_count = Threat.objects.filter(
@@ -68,32 +68,34 @@ def dashboard(request):
     trend_counts = []
 
     for item in trend_data:
+
         trend_labels.append(
             item['day'].strftime('%Y-%m-%d')
         )
+
         trend_counts.append(
             item['total']
         )
 
-        malware_count = Threat.objects.filter(
-            category='Malware'
-        ).count()
+    malware_count = Threat.objects.filter(
+        category='Malware'
+    ).count()
 
-        phishing_count = Threat.objects.filter(
-            category='Phishing'
-        ).count()
+    phishing_count = Threat.objects.filter(
+        category='Phishing'
+    ).count()
 
-        data_breach_count = Threat.objects.filter(
-            category='Data Breach'
-        ).count()
+    data_breach_count = Threat.objects.filter(
+        category='Data Breach'
+    ).count()
 
-        ddos_count = Threat.objects.filter(
-            category='DDoS'
-        ).count()
+    ddos_count = Threat.objects.filter(
+        category='DDoS'
+    ).count()
 
-        apt_count = Threat.objects.filter(
-            category='APT'
-        ).count()
+    apt_count = Threat.objects.filter(
+        category='APT'
+    ).count()
 
     context = {
 

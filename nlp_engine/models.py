@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Threat(models.Model):
 
     threat_name = models.CharField(
@@ -12,6 +13,10 @@ class Threat(models.Model):
 
     risk_score = models.IntegerField(
         default=0
+    )
+
+    occurrence_count = models.IntegerField(
+        default=1
     )
 
     created_at = models.DateTimeField(

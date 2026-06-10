@@ -19,20 +19,27 @@
 
     <div class="sidebar">
 
-        <h2>🛡 Cyber Threat</h2>
+        <div class="logo-section">
+
+            <h2 class="logo-text">
+                🛡 Cyber Threat
+            </h2>
+
+            <p class="logo-subtitle">
+                Profiler v1.0
+            </p>
+
+        </div>
 
         <ul>
+
             <li><a href="/dashboard/">Dashboard</a></li>
+            <li><a href="/threats/">Threats</a></li>
+            <li><a href="/alerts/">Alerts</a></li>
+            <li><a href="/feed/">Intelligence Feed</a></li>
+            <li><a href="/posts/">Posts</a></li>
+            <li><a href="/logout/">Logout</a></li>
 
-<li><a href="/threats/">Threats</a></li>
-
-<li><a href="/alerts/">Alerts</a></li>
-
-<li><a href="/feed/">Intelligence Feed</a></li>
-
-<li><a href="/posts/">Posts</a></li>
-
-<li><a href="/logout/">Logout</a></li>
         </ul>
 
     </div>
@@ -40,80 +47,13 @@
     <div class="main-content">
 
         {% block content %}
-        <div class="mb-4">
-
-    <h3>
-        Cyber Threat Profiler
-    </h3>
-
-    <hr style="border-color:#334155;">
-
-</div>
         {% endblock %}
 
     </div>
 
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-
-    const threatCanvas = document.getElementById('threatChart');
-
-    if (threatCanvas) {
-
-        new Chart(threatCanvas, {
-            type: 'line',
-            data: {
-               labels: {{ trend_labels|safe }},
-               datasets: [{
-                    label: 'Threats',
-                    data: {{ trend_counts|safe }}
-                }]
-            }
-        });
-
-    }
-
-    const riskCanvas = document.getElementById('riskChart');
-
-    if (riskCanvas) {
-
-        new Chart(riskCanvas, {
-            type: 'pie',
-            data: {
-               labels: [
-    'Malware',
-    'Phishing',
-    'Data Breach',
-    'DDoS',
-    'APT'
-],
-
-datasets: [{
-
-    data: [
-
-        {{ malware_count }},
-
-        {{ phishing_count }},
-
-        {{ data_breach_count }},
-
-        {{ ddos_count }},
-
-        {{ apt_count }}
-
-    ]
-
-}]
-            }
-        });
-
-    }
-
-});
-</script>
 </body>
 </html>

@@ -1,20 +1,65 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Threat
-
+from collections import Counter
 
 def threat_list(request):
 
-    threats = Threat.objects.all().order_by('-created_at')
+    threats = Threat.objects.all().order_by(
+        '-created_at'
+    )
+
+    total_threats = Threat.objects.count()
+
+    high_risk_count = Threat.objects.filter(
+        risk_score__gte=80
+    ).count()
+
+    malware_count = Threat.objects.filter(
+        category='Malware'
+    ).count()
+
+    top_category = "N/A"
+
+    category_list = []
+
+    for threat in threats:
+        category_list.append(
+            threat.category
+        )
+
+    category_counter = Counter(
+        category_list
+    )
+
+    chart_labels = list(
+        category_counter.keys()
+    )
+
+    chart_counts = list(
+        category_counter.values()
+    )
+
+    if category_counter:
+
+        top_category = max(
+            category_counter,
+            key=category_counter.get
+        )
 
     return render(
         request,
         'threats.html',
         {
-            'threats': threats
+            'threats': threats,
+            'total_threats': total_threats,
+            'high_risk_count': high_risk_count,
+            'malware_count': malware_count,
+            'top_category': top_category,
+            'chart_labels': chart_labels,
+            'chart_counts': chart_counts
         }
     )
-
 
 def add_threat(request):
 

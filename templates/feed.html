@@ -4,6 +4,58 @@
 
 <h1>Threat Intelligence Feed</h1>
 
+<div class="row mb-4">
+
+    <div class="col-md-3">
+        <div class="card-box text-center">
+            <h5>Total Feeds</h5>
+            <h2>{{ total_feeds }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card-box text-center">
+            <h5>High Severity</h5>
+            <h2>{{ high_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card-box text-center">
+            <h5>Medium Severity</h5>
+            <h2>{{ medium_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card-box text-center">
+            <h5>Top Source</h5>
+            <h2>{{ top_source }}</h2>
+        </div>
+    </div>
+
+</div>
+
+<div class="card-box mb-4">
+
+    <h4 class="mb-3">
+        Feed Severity Distribution
+    </h4>
+
+    <canvas id="severityChart"></canvas>
+
+</div>
+
+<div class="card-box mb-4">
+
+    <h4 class="mb-3">
+        Feed Source Distribution
+    </h4>
+
+    <canvas id="sourceChart"></canvas>
+
+</div>
+
 <a href="/feed/add/" class="btn btn-primary mb-3">
     Add Intelligence
 </a>
@@ -67,16 +119,12 @@
 
                 <a href="/feed/edit/{{ feed.id }}/"
                    class="btn btn-warning btn-sm">
-
                     Edit
-
                 </a>
 
                 <a href="/feed/delete/{{ feed.id }}/"
                    class="btn btn-danger btn-sm">
-
                     Delete
-
                 </a>
 
             </td>
@@ -88,9 +136,7 @@
         <tr>
 
             <td colspan="6" class="text-center">
-
                 No intelligence feeds found.
-
             </td>
 
         </tr>
@@ -100,5 +146,71 @@
     </tbody>
 
 </table>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const severityCtx =
+        document.getElementById('severityChart');
+
+    if (severityCtx) {
+
+        new Chart(severityCtx, {
+
+            type: 'pie',
+
+            data: {
+
+                labels: [
+                    'High',
+                    'Medium',
+                    'Low'
+                ],
+
+                datasets: [{
+
+                    data: [
+                        {{ high_count }},
+                        {{ medium_count }},
+                        {{ low_count }}
+                    ]
+
+                }]
+
+            }
+
+        });
+
+    }
+
+    const sourceCtx =
+        document.getElementById('sourceChart');
+
+    if (sourceCtx) {
+
+        new Chart(sourceCtx, {
+
+            type: 'doughnut',
+
+            data: {
+
+                labels: {{ source_labels|safe }},
+
+                datasets: [{
+
+                    data: {{ source_counts|safe }}
+
+                }]
+
+            }
+
+        });
+
+    }
+
+});
+
+</script>
 
 {% endblock %}

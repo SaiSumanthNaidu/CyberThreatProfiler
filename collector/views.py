@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from collections import Counter
 
 from .models import Feed
 
@@ -8,7 +9,6 @@ from nlp_engine.detector import (
 )
 
 from nlp_engine.models import Threat
-
 from alerts.models import Alert
 
 
@@ -18,11 +18,60 @@ def feed_list(request):
         '-created_at'
     )
 
+    total_feeds = Feed.objects.count()
+
+    high_count = Feed.objects.filter(
+        severity='High'
+    ).count()
+
+    medium_count = Feed.objects.filter(
+        severity='Medium'
+    ).count()
+
+    low_count = Feed.objects.filter(
+        severity='Low'
+    ).count()
+
+    source_list = []
+
+    for feed in feeds:
+        source_list.append(
+            feed.source
+        )
+
+    source_counter = Counter(
+        source_list
+    )
+
+    source_labels = list(
+        source_counter.keys()
+    )
+
+    source_counts = list(
+        source_counter.values()
+    )
+
+    top_source = "N/A"
+
+    if source_counter:
+
+        top_source = max(
+            source_counter,
+            key=source_counter.get
+        )
+
     return render(
         request,
         'feed.html',
         {
-            'feeds': feeds
+            'feeds': feeds,
+            'total_feeds': total_feeds,
+            'high_count': high_count,
+            'medium_count': medium_count,
+            'low_count': low_count,
+            'top_source': top_source,
+            'source_labels': source_labels,
+            'source_counts': source_counts
         }
     )
 
@@ -52,17 +101,35 @@ def add_feed(request):
 
         if category != 'Unknown':
 
-            Threat.objects.create(
-                threat_name=description[:100],
-                category=category,
-                risk_score=risk_score
-            )
+            existing_threat = Threat.objects.filter(
+                category=category
+            ).first()
 
-            Alert.objects.create(
-                title=f'{category} Threat Detected',
-                risk_level='High',
-                description=description
-            )
+            if existing_threat:
+
+                existing_threat.occurrence_count += 1
+                existing_threat.save()
+
+            else:
+
+                Threat.objects.create(
+                    threat_name=description[:100],
+                    category=category,
+                    risk_score=risk_score,
+                    occurrence_count=1
+                )
+
+            existing_alert = Alert.objects.filter(
+                title=f'{category} Threat Detected'
+            ).first()
+
+            if not existing_alert:
+
+                Alert.objects.create(
+                    title=f'{category} Threat Detected',
+                    risk_level='High',
+                    description=description
+                )
 
         return redirect('feed')
 

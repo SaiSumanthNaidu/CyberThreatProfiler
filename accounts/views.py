@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 
 def login_view(request):
 
+    error = None
+
     if request.method == "POST":
 
         username = request.POST.get("username")
@@ -20,8 +22,15 @@ def login_view(request):
             login(request, user)
             return redirect('dashboard')
 
-    return render(request, 'login.html')
+        error = "Invalid username or password"
 
+    return render(
+        request,
+        'login.html',
+        {
+            'error': error
+        }
+    )
 
 def register_view(request):
 

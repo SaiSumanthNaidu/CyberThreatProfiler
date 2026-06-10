@@ -2,10 +2,55 @@
 
 {% block content %}
 
-<h1>Alert Management</h1>
+<h1>Alert Analytics Center</h1>
 
-<a href="/alerts/add/" class="btn btn-primary mb-3">
+<div class="row mb-4">
+
+    <div class="col-md-3">
+        <div class="card-box text-center">
+            <h5>Total Alerts</h5>
+            <h2>{{ total_alerts }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card-box text-center">
+            <h5>High Alerts</h5>
+            <h2>{{ high_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card-box text-center">
+            <h5>Medium Alerts</h5>
+            <h2>{{ medium_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card-box text-center">
+            <h5>Top Alert</h5>
+            <h2>{{ top_alert }}</h2>
+        </div>
+    </div>
+
+</div>
+
+<div class="card-box mb-4">
+
+    <h4 class="mb-3">
+        Alert Severity Distribution
+    </h4>
+
+    <canvas id="alertChart"></canvas>
+
+</div>
+
+<a href="/alerts/add/"
+   class="btn btn-primary mb-3">
+
     Add Alert
+
 </a>
 
 <table class="table table-dark">
@@ -29,8 +74,30 @@
         <tr>
 
             <td>{{ alert.title }}</td>
-            <td>{{ alert.risk_level }}</td>
+
+            <td>
+
+                {% if alert.risk_level == "High" %}
+                    <span class="badge bg-danger">
+                        {{ alert.risk_level }}
+                    </span>
+
+                {% elif alert.risk_level == "Medium" %}
+                    <span class="badge bg-warning text-dark">
+                        {{ alert.risk_level }}
+                    </span>
+
+                {% else %}
+                    <span class="badge bg-success">
+                        {{ alert.risk_level }}
+                    </span>
+
+                {% endif %}
+
+            </td>
+
             <td>{{ alert.description }}</td>
+
             <td>{{ alert.created_at }}</td>
 
             <td>
@@ -56,7 +123,14 @@
         {% empty %}
 
         <tr>
-            <td colspan="5">No alerts found.</td>
+
+            <td colspan="5"
+                class="text-center">
+
+                No alerts found.
+
+            </td>
+
         </tr>
 
         {% endfor %}
@@ -64,5 +138,48 @@
     </tbody>
 
 </table>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const ctx =
+        document.getElementById(
+            'alertChart'
+        );
+
+    if (ctx) {
+
+        new Chart(ctx, {
+
+            type: 'pie',
+
+            data: {
+
+                labels: [
+                    'High',
+                    'Medium',
+                    'Low'
+                ],
+
+                datasets: [{
+
+                    data: [
+                        {{ high_count }},
+                        {{ medium_count }},
+                        {{ low_count }}
+                    ]
+
+                }]
+
+            }
+
+        });
+
+    }
+
+});
+
+</script>
 
 {% endblock %}

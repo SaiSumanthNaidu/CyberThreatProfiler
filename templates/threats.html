@@ -2,7 +2,61 @@
 
 {% block content %}
 
-<h1>Threat Management</h1>
+<div class="hero-banner">
+
+    <h1>
+        Threat Management
+    </h1>
+
+    <p>
+        Monitor and manage detected cyber threats.
+    </p>
+
+</div>
+
+<div class="row mb-4">
+
+    <div class="col-md-3">
+        <div class="card-box text-center">
+            <h5>Total Threats</h5>
+            <h2>{{ total_threats }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card-box text-center">
+            <h5>High Risk</h5>
+            <h2>{{ high_risk_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card-box text-center">
+            <h5>Malware Threats</h5>
+            <h2>{{ malware_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card-box text-center">
+            <h5>Top Category</h5>
+            <h2>{{ top_category }}</h2>
+        </div>
+    </div>
+
+</div>
+
+<div class="card-box mb-4">
+
+    <h4 class="mb-3 text-center">
+        Threat Category Distribution
+    </h4>
+
+    <div style="max-width:500px; margin:auto;">
+        <canvas id="categoryChart"></canvas>
+    </div>
+
+</div>
 
 <a href="/threats/add/"
    class="btn btn-primary mb-3">
@@ -16,17 +70,12 @@
     <thead>
 
         <tr>
-
             <th>Name</th>
-
             <th>Category</th>
-
             <th>Risk Score</th>
-
+            <th>Occurrences</th>
             <th>Created</th>
-
             <th>Actions</th>
-
         </tr>
 
     </thead>
@@ -41,24 +90,45 @@
 
             <td>{{ threat.category }}</td>
 
-            <td>{{ threat.risk_score }}</td>
+            <td>
 
-            <td>{{ threat.created_at }}</td>
+                {% if threat.risk_score >= 80 %}
+                    <span class="badge bg-danger">
+                        {{ threat.risk_score }}
+                    </span>
+
+                {% elif threat.risk_score >= 60 %}
+                    <span class="badge bg-warning text-dark">
+                        {{ threat.risk_score }}
+                    </span>
+
+                {% else %}
+                    <span class="badge bg-success">
+                        {{ threat.risk_score }}
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+                {{ threat.occurrence_count }}
+            </td>
+
+            <td>
+                {{ threat.created_at }}
+            </td>
 
             <td>
 
                 <a href="/threats/edit/{{ threat.id }}/"
                    class="btn btn-warning btn-sm">
-
                     Edit
-
                 </a>
 
                 <a href="/threats/delete/{{ threat.id }}/"
                    class="btn btn-danger btn-sm">
-
                     Delete
-
                 </a>
 
             </td>
@@ -69,7 +139,7 @@
 
         <tr>
 
-            <td colspan="5">
+            <td colspan="6" class="text-center">
 
                 No threats found.
 
@@ -82,5 +152,71 @@
     </tbody>
 
 </table>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const ctx = document.getElementById('categoryChart');
+
+    if (ctx) {
+
+        new Chart(ctx, {
+
+            type: 'pie',
+
+            data: {
+
+                labels: [
+                    'Malware',
+                    'Phishing',
+                    'Data Breach'
+                ],
+
+                datasets: [{
+
+                    label: 'Threat Categories',
+
+                    data: [
+                        {{ malware_count }},
+                        1,
+                        1
+                    ],
+
+                    backgroundColor: [
+                        '#ef4444',
+                        '#f59e0b',
+                        '#3b82f6'
+                    ]
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+
+                        labels: {
+                            color: 'white'
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    }
+
+});
+
+</script>
 
 {% endblock %}
