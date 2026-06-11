@@ -5,32 +5,54 @@ THREAT_KEYWORDS = {
         'trojan',
         'ransomware',
         'virus',
-        'worm'
+        'worm',
+        'backdoor',
+        'spyware',
+        'payload'
     ],
 
     'Phishing': [
         'phishing',
         'credential',
+        'credential theft',
         'fake login',
-        'email scam'
+        'email scam',
+        'social engineering'
     ],
 
     'DDoS': [
         'ddos',
         'botnet',
-        'traffic flood'
+        'traffic flood',
+        'denial of service'
     ],
 
     'Data Breach': [
         'data breach',
         'leak',
         'stolen data',
-        'database exposed'
+        'database exposed',
+        'data exposure',
+        'compromised records'
     ],
 
     'APT': [
         'apt',
-        'advanced persistent threat'
+        'advanced persistent threat',
+        'nation-state',
+        'state-sponsored'
+    ],
+
+    'Vulnerability': [
+        'cve',
+        'vulnerability',
+        'exploit',
+        'zero-day',
+        'remote code execution',
+        'security flaw',
+        'authentication bypass',
+        'privilege escalation',
+        'patch'
     ]
 
 }
@@ -60,6 +82,7 @@ def calculate_risk(category):
         'DDoS': 70,
         'Data Breach': 90,
         'APT': 95,
+        'Vulnerability': 80,
         'Unknown': 20
 
     }

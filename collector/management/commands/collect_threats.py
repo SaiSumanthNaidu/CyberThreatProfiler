@@ -18,7 +18,6 @@ class Command(BaseCommand):
 
     help = "Collect Threat Intelligence"
 
-
     def handle(self, *args, **kwargs):
 
         articles = fetch_articles()
@@ -27,10 +26,10 @@ class Command(BaseCommand):
 
             description = item["description"]
 
+            # Skip duplicates
             if Feed.objects.filter(
                 description=description
             ).exists():
-
                 continue
 
             category = detect_threat(
@@ -54,8 +53,6 @@ class Command(BaseCommand):
             )
 
             if category != "Unknown":
-
-                continue
 
                 Threat.objects.create(
 
