@@ -81,12 +81,8 @@ WSGI_APPLICATION = 'CyberThreatProfiler.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cyberthreatprofiler',
-        'USER': 'root',
-        'PASSWORD': 'Sumanth@2004',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
