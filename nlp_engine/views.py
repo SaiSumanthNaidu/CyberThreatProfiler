@@ -9,6 +9,41 @@ def threat_list(request):
         '-created_at'
     )
 
+    search = request.GET.get(
+        'search',
+        ''
+    )
+
+    risk = request.GET.get(
+        'risk',
+        ''
+    )
+
+    if search:
+
+        threats = threats.filter(
+            threat_name__icontains=search
+        )
+
+    if risk == "high":
+
+        threats = threats.filter(
+            risk_score__gte=80
+        )
+
+    elif risk == "medium":
+
+        threats = threats.filter(
+            risk_score__gte=60,
+            risk_score__lt=80
+        )
+
+    elif risk == "low":
+
+        threats = threats.filter(
+            risk_score__lt=60
+        )
+
     total_threats = Threat.objects.count()
 
     high_risk_count = Threat.objects.filter(
@@ -52,12 +87,31 @@ def threat_list(request):
         'threats.html',
         {
             'threats': threats,
+
+            'search': search,
+            'risk': risk,
+
             'total_threats': total_threats,
             'high_risk_count': high_risk_count,
             'malware_count': malware_count,
             'top_category': top_category,
             'chart_labels': chart_labels,
             'chart_counts': chart_counts
+        }
+    )
+
+def threat_detail(request, id):
+
+    threat = get_object_or_404(
+        Threat,
+        id=id
+    )
+
+    return render(
+        request,
+        'threat_detail.html',
+        {
+            'threat': threat
         }
     )
 

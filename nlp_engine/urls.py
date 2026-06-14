@@ -11,4 +11,6 @@ urlpatterns = [
 
     path('delete/<int:id>/', views.delete_threat, name='delete_threat'),
 
+    path('detail/<int:id>/', views.threat_detail, name='threat_detail'),
+
 ]

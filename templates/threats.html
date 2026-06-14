@@ -58,12 +58,72 @@
 
 </div>
 
-<a href="/threats/add/"
-   class="btn btn-primary mb-3">
+<div class="row mb-3">
 
-    Add Threat
+    <div class="col-md-8">
 
-</a>
+        <form method="GET">
+
+            <div class="input-group">
+
+                <input
+                    type="text"
+                    name="search"
+                    class="form-control"
+                    placeholder="Search threats..."
+                    value="{{ request.GET.search }}"
+                >
+
+                <select
+                    name="risk"
+                    class="form-select"
+                >
+
+                    <option value="">
+                        All Risks
+                    </option>
+
+                    <option value="high">
+                        High Risk
+                    </option>
+
+                    <option value="medium">
+                        Medium Risk
+                    </option>
+
+                    <option value="low">
+                        Low Risk
+                    </option>
+
+                </select>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+
+                    Search
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="col-md-4 text-end">
+
+        <a href="/threats/add/"
+           class="btn btn-success">
+
+            Add Threat
+
+        </a>
+
+    </div>
+
+</div>
 
 <table class="table table-dark">
 
@@ -121,15 +181,20 @@
 
             <td>
 
-                <a href="/threats/edit/{{ threat.id }}/"
-                   class="btn btn-warning btn-sm">
-                    Edit
-                </a>
+                <a href="/threats/detail/{{ threat.id }}/"
+   class="btn btn-info btn-sm">
+    View
+</a>
 
-                <a href="/threats/delete/{{ threat.id }}/"
-                   class="btn btn-danger btn-sm">
-                    Delete
-                </a>
+<a href="/threats/edit/{{ threat.id }}/"
+   class="btn btn-warning btn-sm">
+    Edit
+</a>
+
+<a href="/threats/delete/{{ threat.id }}/"
+   class="btn btn-danger btn-sm">
+    Delete
+</a>
 
             </td>
 

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="hero-banner">
+
+    <h1>
+        Threat Details
+    </h1>
+
+</div>
+
+<div class="card-box">
+
+    <h3>
+        {{ threat.threat_name }}
+    </h3>
+
+    <hr>
+
+    <p>
+        <strong>Category:</strong>
+        {{ threat.category }}
+    </p>
+
+    <p>
+        <strong>Risk Score:</strong>
+        {{ threat.risk_score }}
+    </p>
+
+    <p>
+        <strong>Occurrences:</strong>
+        {{ threat.occurrence_count }}
+    </p>
+
+    <p>
+        <strong>Created At:</strong>
+        {{ threat.created_at }}
+    </p>
+
+</div>
+
+<br>
+
+<a href="/threats/"
+   class="btn btn-primary">
+
+    Back to Threats
+
+</a>
+
+{% endblock %}
