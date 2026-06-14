@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from collections import Counter
+from django.http import HttpResponse
+from django.core.management import call_command
 
 from .models import Feed
 
@@ -11,6 +13,9 @@ from nlp_engine.detector import (
 from nlp_engine.models import Threat
 from alerts.models import Alert
 
+def run_collector(request):
+    call_command('collect_threats')
+    return HttpResponse("Threat collection completed")
 
 def feed_list(request):
 
