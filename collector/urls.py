@@ -11,5 +11,4 @@ urlpatterns = [
 
     path('delete/<int:id>/', views.delete_feed, name='delete_feed'),
 
-    path('run-collector/', views.run_collector, name='run_collector'),
-]
+    ]
