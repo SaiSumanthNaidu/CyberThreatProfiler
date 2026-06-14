@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.db.models.functions import TruncDate
+from django.core.management import call_command
+from django.shortcuts import redirect
 import json
 
 from collector.models import Feed
@@ -146,3 +148,11 @@ def dashboard(request):
         'dashboard.html',
         context
     )
+
+
+@login_required
+def refresh_threats(request):
+
+    call_command('collect_threats')
+
+    return redirect('dashboard')
