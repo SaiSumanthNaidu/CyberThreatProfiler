@@ -40,16 +40,25 @@ def register_view(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
 
+        if User.objects.filter(username=username).exists():
+
+            return render(
+                request,
+                "register.html",
+                {
+                    "error": "Username already exists"
+                }
+            )
+
         User.objects.create_user(
             username=username,
             email=email,
             password=password
         )
 
-        return redirect('login')
+        return redirect("login")
 
-    return render(request, 'register.html')
-
+    return render(request, "register.html")
 
 def logout_view(request):
     logout(request)
